@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../models/book.dart';
 import '../../models/rating.dart';
 import '../../services/hive_service.dart';
@@ -149,20 +150,31 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               background: widget.book.coverUrl != null
-                  ? Image.asset(
-                      widget.book.coverUrl!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: AppColors.lightGold,
-                          child: const Icon(
-                            Icons.book,
-                            size: 100,
-                            color: AppColors.goldenAccent,
+                  ? (widget.book.coverUrl!.endsWith('.svg')
+                      ? SvgPicture.asset(
+                          widget.book.coverUrl!,
+                          fit: BoxFit.cover,
+                          placeholderBuilder: (context) => Container(
+                            color: AppColors.lightGold,
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                           ),
-                        );
-                      },
-                    )
+                        )
+                      : Image.asset(
+                          widget.book.coverUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: AppColors.lightGold,
+                              child: const Icon(
+                                Icons.book,
+                                size: 100,
+                                color: AppColors.goldenAccent,
+                              ),
+                            );
+                          },
+                        ))
                   : Container(
                       color: AppColors.lightGold,
                       child: const Icon(

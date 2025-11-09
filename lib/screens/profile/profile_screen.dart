@@ -259,50 +259,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
         SliverAppBar(
           expandedHeight: 200,
           pinned: true,
-          backgroundColor: AppColors.goldenAccent.withValues(alpha: 0.9),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           flexibleSpace: FlexibleSpaceBar(
-            background: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppColors.goldenAccent,
-                    AppColors.lightGold,
-                  ],
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 40),
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: AppColors.white,
-                    child: Text(
-                      _currentUser!.name[0].toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.darkBrownText,
+            background: Consumer<BackgroundProvider>(
+              builder: (context, bgProvider, _) {
+                return Container(
+                  decoration: BoxDecoration(
+                    gradient: bgProvider.currentBackground.gradient,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 40),
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundColor: AppColors.white,
+                        child: Text(
+                          _currentUser!.name[0].toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.darkBrownText,
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 12),
+                      Text(
+                        _currentUser!.name,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: AppColors.darkBrownText,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      Text(
+                        _currentUser!.email,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.softBrown,
+                            ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _currentUser!.name,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppColors.darkBrownText,
-                        ),
-                  ),
-                  Text(
-                    _currentUser!.email,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.softBrown,
-                        ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
           ),
         ),
@@ -314,7 +312,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 // Статистика
                 Card(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Theme.of(context).cardColor.withValues(alpha: 0.9),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -347,32 +345,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 12),
                 Card(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Theme.of(context).cardColor.withValues(alpha: 0.9),
                   child: Column(
                     children: [
                       // Перемикач теми (перенесений з головної)
                       SwitchListTile(
-                        title: const Text('Темна тема'),
-                        subtitle: const Text('Комфортне читання вночі'),
+                        title: Text(
+                          'Темна тема',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        subtitle: Text(
+                          'Комфортне читання вночі',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
                         value: themeProvider.isDarkMode,
                         onChanged: (value) {
                           themeProvider.setTheme(value);
                         },
                         secondary: Icon(
                           themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                          color: Theme.of(context).iconTheme.color,
                         ),
                       ),
                       const Divider(height: 1),
                       // Вибір фону
                       ListTile(
-                        leading: const Icon(Icons.palette),
-                        title: const Text('Фон застосунку'),
+                        leading: Icon(
+                          Icons.palette,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        title: Text(
+                          'Фон застосунку',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                         subtitle: Consumer<BackgroundProvider>(
                           builder: (context, bgProvider, _) {
-                            return Text(bgProvider.currentBackground.name);
+                            return Text(
+                              bgProvider.currentBackground.name,
+                              style: Theme.of(context).textTheme.bodySmall,
+                            );
                           },
                         ),
-                        trailing: const Icon(Icons.chevron_right),
+                        trailing: Icon(
+                          Icons.chevron_right,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
                         onTap: _showBackgroundSelector,
                       ),
                     ],
@@ -387,13 +404,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 12),
                 Card(
-                  color: Colors.white.withValues(alpha: 0.9),
+                  color: Theme.of(context).cardColor.withValues(alpha: 0.9),
                   child: Column(
                     children: [
                       ListTile(
-                        leading: const Icon(Icons.add_circle_outline),
-                        title: const Text('Додати власну книгу'),
-                        trailing: const Icon(Icons.chevron_right),
+                        leading: Icon(
+                          Icons.add_circle_outline,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        title: Text(
+                          'Додати власну книгу',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        trailing: Icon(
+                          Icons.chevron_right,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
                         onTap: _showAddBookDialog,
                       ),
                       const Divider(height: 1),
@@ -406,7 +432,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           'Вийти з акаунту',
                           style: TextStyle(color: AppColors.error),
                         ),
-                        trailing: const Icon(Icons.chevron_right),
+                        trailing: const Icon(
+                          Icons.chevron_right,
+                          color: AppColors.error,
+                        ),
                         onTap: _logout,
                       ),
                     ],
