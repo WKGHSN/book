@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../models/book.dart';
 import '../constants/app_colors.dart';
 
@@ -68,20 +69,29 @@ class GenreSection extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
                               child: book.coverUrl != null
-                                  ? Image.asset(
-                                      book.coverUrl!,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return const Center(
-                                          child: Icon(
-                                            Icons.book,
-                                            size: 48,
-                                            color: AppColors.goldenAccent,
+                                  ? (book.coverUrl!.endsWith('.svg')
+                                      ? SvgPicture.asset(
+                                          book.coverUrl!,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                          placeholderBuilder: (context) => const Center(
+                                            child: CircularProgressIndicator(),
                                           ),
-                                        );
-                                      },
-                                    )
+                                        )
+                                      : Image.asset(
+                                          book.coverUrl!,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) {
+                                            return const Center(
+                                              child: Icon(
+                                                Icons.book,
+                                                size: 48,
+                                                color: AppColors.goldenAccent,
+                                              ),
+                                            );
+                                          },
+                                        ))
                                   : const Center(
                                       child: Icon(
                                         Icons.book,

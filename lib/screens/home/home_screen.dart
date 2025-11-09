@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: CustomScrollView(
         slivers: [
-          // Компактний AppBar БЕЗ перемикача теми
+          // Компактний AppBar з кнопкою зміни теми
           SliverAppBar(
             floating: true,
             snap: true,
@@ -109,6 +109,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            actions: [
+              // Кнопка зміни теми (сонце/місяць)
+              Consumer<ThemeProvider>(
+                builder: (context, themeProvider, _) {
+                  return IconButton(
+                    icon: Icon(
+                      themeProvider.isDarkMode 
+                          ? Icons.light_mode 
+                          : Icons.dark_mode,
+                      color: themeProvider.isDarkMode
+                          ? AppColors.goldenAccent
+                          : AppColors.darkBrownText,
+                    ),
+                    onPressed: () {
+                      themeProvider.toggleTheme();
+                    },
+                    tooltip: themeProvider.isDarkMode 
+                        ? 'Світла тема' 
+                        : 'Темна тема',
+                  );
+                },
+              ),
+            ],
           ),
 
           // Компактний фільтр категорій (чіпси)
